@@ -1,0 +1,65 @@
+﻿@{
+    Layout = "~/_SiteLayout.cshtml";
+    Page.Title = "FastFilms.co.uk";
+  
+}
+
+@section featured {
+<section class="featured">
+    <div class="content-wrapper">
+        <hgroup class="title">
+            <h1>@Page.Title.</h1>
+            
+        </hgroup>
+       <p>Welcome to FastFilms.co.uk the best place for renting your favourite Films's and Games.</p>
+    </div>
+</section>
+}
+
+<h3> Rent Films's and Games anytime and get them posted direct to your door!</h3>
+
+<ol class="round">
+    <li class="one">
+         <h5> Register </h5> 
+        Register your details onto our system. It only takes 2 minutes.
+        
+    </li>
+
+    <li class="two">
+       <h5> Search </h5> 
+        Search through our database for your favourite film or game.
+
+ 
+    </li>
+
+       <li class="three">
+        <h5> Order </h5> 
+       Order your favourite film or game and we will have it sent to you straight away!
+     
+         
+    </li>
+    
+</ol>
+
+
+@using Microsoft.Web.Helpers;
+<!DOCTYPE html>
+<html>
+ <body>
+    <table>
+      <tr>
+        <td>Tweet us!</td>
+       
+      </tr>
+      <tr>
+        <td>@Twitter.Profile("films_fast")</td>
+      
+      </tr>
+    </table>
+
+ <div id=" youtube" >
+        <iframe width="560" height="315" src="http://www.youtube.com/embed/jqEJ8V_z2T4" frameborder="0" allowfullscreen></iframe>
+  </div>             
+  </body>
+</html>
+

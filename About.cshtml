@@ -1,0 +1,72 @@
+﻿@{
+    Layout = "~/_SiteLayout.cshtml";
+    Page.Title = "Search to your hearts content!";
+
+
+    var db = Database.Open("StarterSite") ;
+    var selectCommand = "SELECT * FROM Products";
+    var searchTerm = "";
+
+    if(!Request.QueryString["searchName"].IsEmpty() ) {
+        selectCommand = "SELECT * FROM Products WHERE Name LIKE @0";
+        searchTerm = "%" + Request["searchName"] + "%";
+    }
+
+    var selectedData = db.Query(selectCommand, searchTerm);
+    var grid = new WebGrid(source: selectedData, defaultSort: "Price", rowsPerPage:3);
+
+     if (!WebSecurity.IsAuthenticated) {
+        Response.Redirect("~/Account/Login?returnUrl="
+            + Request.Url.LocalPath);
+    }
+}
+
+@section featured {
+<section class="featured">
+    <div class="content-wrapper">
+        <hgroup class="title">
+            <h1>@Page.Title.</h1>
+            
+        </hgroup>
+       <p>Search for your desired movie or game:</p>
+    </div>
+</section>
+}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Movies and games</title>
+    <style type="text/css">
+      .grid { margin: 4px; border-collapse: collapse; width: 600px; }
+      .grid th, .grid td { border: 1px solid #C0C0C0; padding: 5px; }
+      .head { background-color: #E8E8E8; font-weight: bold; color: #FFF; }
+      .alt { background-color: #E8E8E8; color: #000; }
+    </style>
+  </head>
+  <body>
+    <h1>Movies and games</h1>
+      <form method="get">
+
+        <div>
+          <label for="SearchName">Title contains the following:</label>
+          <input type="text" name="SearchName" value="@Request.QueryString["SearchName"]" />
+          <input type="Submit" value="Search Title" /><br/>
+        </div>
+      </form>
+
+    <div>
+      @grid.GetHtml(
+        tableStyle: "grid",
+        headerStyle: "head",
+        alternatingRowStyle: "alt",
+        columns: grid.Columns(
+          grid.Column("Name"),
+          grid.Column("Price"),
+          grid.Column("Description")
+        )
+      )
+    </div>
+  </body>
+</html>

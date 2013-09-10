@@ -1,0 +1,58 @@
+﻿@{
+    var name = "";
+    var description = "";
+    var Id = "";
+
+    if(!IsPost){
+        if(!Request.QueryString["Id"].IsEmpty() && Request.QueryString["Id"].IsInt()){
+            Id = Request.QueryString["Id"];
+            var db = Database.Open("StarterSite");
+            var dbCommand = "SELECT * FROM Products WHERE Id = @0";
+            var row = db.QuerySingle(dbCommand, Id);
+            if(row != null) {
+                name = row.name;
+       
+                description = row.description;
+            }
+            else{
+                Validation.AddFormError("No movie/game was found for that Id.");
+
+            }
+        }
+
+    }
+
+    if(IsPost && !Request["buttonDelete"].IsEmpty()){
+        Id = Request.Form["Id"];
+        var db = Database.Open("StarterSite");
+        var deleteCommand = "DELETE FROM Products WHERE ID = @0";
+        db.Execute(deleteCommand, Id);
+        Response.Redirect("~/AdminOnly");
+    }
+}
+<html>
+<head>
+  <title>Delete a Movie</title>
+</head>
+<body>
+      <h1>Delete a Movie</h1>
+        @Html.ValidationSummary()
+      <p><a href="~/AdminOnly">Return to movie listing</a></p>
+
+      <form method="post">
+        <fieldset>
+        <legend>Movie Information</legend>
+
+        <p><span>name:</span>
+         <span>@name</span></p>
+
+        <p><span>description:</span>
+          <span>@description</span></p>
+
+        <input type="hidden" name="Id" value="@Id" />
+        <p><input type="submit" name="buttonDelete" value="Delete" /></p>
+        </fieldset>
+        <p><a href="~/AdminOnly">Return to admin page</a></p>
+      </form>
+    </body>
+</html>

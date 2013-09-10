@@ -1,0 +1,70 @@
+﻿@{
+
+    Validation.RequireField("name", "You must enter a name");
+    Validation.RequireField("price", "Price is required");
+    Validation.RequireField("description", "You haven't entered a description");
+
+    var name = "";
+    var price = "";
+    var description = "";
+
+    if(IsPost && Validation.IsValid()){
+       name = Request.Form["name"];
+       price = Request.Form["price"];
+       description = Request.Form["description"];
+
+       var db = Database.Open("StarterSite");
+       var insertCommand = "INSERT INTO Products (name, price, description) Values(@0, @1, @2)";
+       db.Execute(insertCommand, name, price, description);
+       Response.Redirect("~/AdminOnly");
+
+
+    }
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Add a Movie</title>
+      <style type="text/css">
+    .field-validation-error {
+      font-weight:bold;
+      color:red;
+      background-color:yellow;
+     }
+    .validation-summary-errors{
+      border:2px dashed red;
+      color:red;
+      background-color:yellow;
+      font-weight:bold;
+      margin:12px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Add a Movie/Game</h1>
+  @Html.ValidationSummary()
+  <form method="post">
+    <fieldset>
+      <legend>Movie/Game Information</legend>
+      <p><label for="name">Title:</label>
+         <input type="text" name="name" value="@Request.Form["name"]" />
+          @Html.ValidationMessage("name")
+      </p>
+
+      <p><label for="price">Price:</label>
+         <input type="text" name="price" value="@Request.Form["price"]" />
+         @Html.ValidationMessage("price")
+      </p>
+
+      <p><label for="description">Desc:</label>
+         <input type="text" name="description" value="@Request.Form["description"]" />
+          @Html.ValidationMessage("description")
+      </p>
+
+      <p><input type="submit" name="buttonSubmit" value="Add Movie" /></p>
+    </fieldset>
+  </form>
+</body>
+</html>
